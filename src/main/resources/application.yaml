@@ -23,6 +23,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false
 
   h2:
     console:
@@ -47,6 +49,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false
 
   h2:
     console:
@@ -71,3 +75,27 @@ spring:
       hibernate:
         show-sql: false
         format_sql: false
+        default_batch_fetch_size: 100
+    open-in-view: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:mysql://${DATABASE_URL}?useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO}
+    properties:
+      hibernate:
+        show-sql: false
+        format_sql: false
+        default_batch_fetch_size: 100
+    open-in-view: false
