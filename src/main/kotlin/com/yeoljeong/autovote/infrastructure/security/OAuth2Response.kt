@@ -1,5 +1,7 @@
 package com.yeoljeong.autovote.infrastructure.security
 
+import com.yeoljeong.autovote.domain.user.User
+
 interface OAuth2Response {
 
     fun getProvider(): String
@@ -11,5 +13,7 @@ interface OAuth2Response {
     fun getName(): String
 
     fun getImgUrl(): String
+
+    fun toUser(): User
 
 }

@@ -14,7 +14,8 @@ class OAuth2LoginFailureHandler : SimpleUrlAuthenticationFailureHandler() {
         response: HttpServletResponse,
         exception: AuthenticationException
     ) {
-        super.onAuthenticationFailure(request, response, exception)
+        // TODO: 추후 처리 방안 고민
+        response.sendRedirect("http://localhost:5173/oauth2/redirect/error")
     }
 
 }

@@ -1,5 +1,7 @@
 package com.yeoljeong.autovote.infrastructure.security
 
+import com.yeoljeong.autovote.domain.user.User
+
 data class KakaoOAuth2Response(
     private val attributes: Map<String, Any>
 ) : OAuth2Response {
@@ -13,9 +15,9 @@ data class KakaoOAuth2Response(
     }
 
     override fun getEmail(): String {
-        return (attributes["kakao_account"] as Map<String, Any>)["value"].let { value ->
-            (value as Map<String, Any>)["email"].toString()
-        }
+        return attributes["kakao_account"]?.let { account ->
+            (account as Map<String, Any>)["email"] as? String
+        } ?: throw IllegalStateException("이메일 정보를 찾을 수 없습니다.")
     }
 
     override fun getName(): String {
@@ -23,6 +25,14 @@ data class KakaoOAuth2Response(
     }
 
     override fun getImgUrl(): String {
-        return ((attributes["properties"] as Map<String, Any>)["profile_image_url"]).toString()
+        return ((attributes["properties"] as Map<String, Any>)["profile_image"]).toString()
+    }
+
+    override fun toUser(): User {
+        return User(
+            email = getEmail(),
+            name = getName(),
+            imgUrl = getImgUrl()
+        )
     }
 }
