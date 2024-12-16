@@ -1,4 +1,4 @@
-package com.yeoljeong.autovote.infrastructure.security
+package com.yeoljeong.autovote.infrastructure.security.oauth2
 
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.stereotype.Component

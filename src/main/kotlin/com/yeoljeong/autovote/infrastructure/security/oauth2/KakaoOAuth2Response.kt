@@ -1,4 +1,4 @@
-package com.yeoljeong.autovote.infrastructure.security
+package com.yeoljeong.autovote.infrastructure.security.oauth2
 
 import com.yeoljeong.autovote.domain.user.User
 
