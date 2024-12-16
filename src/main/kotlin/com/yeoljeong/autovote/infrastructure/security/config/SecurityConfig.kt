@@ -3,10 +3,12 @@ package com.yeoljeong.autovote.infrastructure.security.config
 import com.yeoljeong.autovote.infrastructure.security.CustomOAuth2UserService
 import com.yeoljeong.autovote.infrastructure.security.OAuth2LoginFailureHandler
 import com.yeoljeong.autovote.infrastructure.security.OAuth2LoginSuccessHandler
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.web.SecurityFilterChain
 
 @EnableWebSecurity
@@ -36,4 +38,14 @@ class SecurityConfig(
             }
             .build()
     }
+
+    @Bean
+    @ConditionalOnProperty(name = ["spring.h2.console.enabled"], havingValue = "true")
+    fun configureH2ConsoleEnable(): WebSecurityCustomizer {
+        return WebSecurityCustomizer { http ->
+            http.ignoring()
+                .requestMatchers("/h2-console/**")
+        }
+    }
+
 }
