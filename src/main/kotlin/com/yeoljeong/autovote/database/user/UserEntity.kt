@@ -17,6 +17,7 @@ class UserEntity(
     companion object {
         fun from(user: User): UserEntity {
             return UserEntity(
+                id = user.id,
                 name = user.name,
                 email = user.email,
                 imgUrl = user.imgUrl
