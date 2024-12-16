@@ -1,14 +1,16 @@
 package com.yeoljeong.autovote.infrastructure.security.config
 
-import com.yeoljeong.autovote.infrastructure.security.CustomOAuth2UserService
-import com.yeoljeong.autovote.infrastructure.security.OAuth2LoginFailureHandler
-import com.yeoljeong.autovote.infrastructure.security.OAuth2LoginSuccessHandler
+import com.yeoljeong.autovote.infrastructure.security.oauth2.CustomOAuth2UserService
+import com.yeoljeong.autovote.infrastructure.security.oauth2.OAuth2LoginFailureHandler
+import com.yeoljeong.autovote.infrastructure.security.oauth2.OAuth2LoginSuccessHandler
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 
 @EnableWebSecurity
@@ -26,6 +28,13 @@ class SecurityConfig(
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
             .cors { it.disable() }
+            .sessionManagement { session ->
+                session
+                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .invalidSessionUrl("/")
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(true)
+            }
             .authorizeHttpRequests {
                 it.anyRequest().permitAll()
             }

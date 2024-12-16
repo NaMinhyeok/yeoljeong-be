@@ -32,6 +32,10 @@ spring:
             client-name: Kakao
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
 
+server:
+  servlet:
+    session:
+      timeout: 30m
 
   datasource:
     url: jdbc:h2:mem:~/yeoljeong
