@@ -22,4 +22,8 @@ data class CustomOAuth2User(
     }
 
     override fun getAuthorities() = mutableListOf(SimpleGrantedAuthority(role))
+
+    fun getEmail(): String {
+        return oAuth2Response.getEmail()
+    }
 }
