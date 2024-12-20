@@ -11,4 +11,8 @@ class VoteManager(
         voteDao.saveAll(options.map { Vote(id = 0, userId = 1, optionId = it) })
     }
 
+    fun cancel(userId: Long, optionId: Long) {
+        voteDao.deleteByUserIdAndOptionId(userId, optionId)
+    }
+
 }

@@ -11,4 +11,9 @@ class VoteRepositoryAdaptor(
     override fun saveAll(votes: Iterable<Vote>): List<Vote> {
         return voteRepository.saveAll(votes.map { VoteEntity.from(it) }).map { it.toDomain() }
     }
+
+    override fun deleteByUserIdAndOptionId(userId: Long, optionId: Long) {
+        voteRepository.deleteByUserIdAndOptionId(userId, optionId)
+    }
+
 }
