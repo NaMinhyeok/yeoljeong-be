@@ -6,4 +6,6 @@ interface UserDao {
 
     fun findByEmail(email: String): User?
 
+    fun findById(id: Long): User?
+
 }

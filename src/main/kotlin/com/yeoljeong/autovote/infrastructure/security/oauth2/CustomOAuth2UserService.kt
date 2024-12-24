@@ -30,7 +30,7 @@ class CustomOAuth2UserService(
 
     private fun handleUser(user: User) {
         // TODO: 사용자가 로그인 할 때 변경된 정보가 있으면 변경할 수 있도록 구현
-        userReader.findByEmail(user.email)
+        userReader.read(user.email)
             ?: userAppender.append(user)
     }
 }
