@@ -7,8 +7,12 @@ class UserReader(
     private val userDao: UserDao
 ) {
 
-    fun findByEmail(email: String): User? {
+    fun read(email: String): User? {
         return userDao.findByEmail(email)
+    }
+
+    fun read(id: Long): User? {
+        return userDao.findById(id)
     }
 
 }

@@ -15,4 +15,8 @@ class VoteManager(
         voteDao.deleteByUserIdAndOptionId(userId, optionId)
     }
 
+    fun exist(userId: Long, optionId: Long): Boolean {
+        return voteDao.existByUserIdAndOptionId(userId, optionId)
+    }
+
 }

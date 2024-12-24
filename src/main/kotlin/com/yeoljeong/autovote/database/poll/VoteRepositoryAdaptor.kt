@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository
 class VoteRepositoryAdaptor(
     private val voteRepository: VoteRepository
 ) : VoteDao {
+
     override fun saveAll(votes: Iterable<Vote>): List<Vote> {
         return voteRepository.saveAll(votes.map { VoteEntity.from(it) }).map { it.toDomain() }
     }
@@ -16,4 +17,11 @@ class VoteRepositoryAdaptor(
         voteRepository.deleteByUserIdAndOptionId(userId, optionId)
     }
 
+    override fun existByUserIdAndOptionId(userId: Long, optionId: Long): Boolean {
+        return voteRepository.existsByUserIdAndOptionId(userId, optionId)
+    }
+
+    override fun findByOptionId(optionId: Long): List<Vote> {
+        return voteRepository.findByOptionId(optionId).map { it.toDomain() }
+    }
 }

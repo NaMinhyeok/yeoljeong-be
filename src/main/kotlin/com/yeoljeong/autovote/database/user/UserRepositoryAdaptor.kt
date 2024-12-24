@@ -2,6 +2,7 @@ package com.yeoljeong.autovote.database.user
 
 import com.yeoljeong.autovote.domain.user.User
 import com.yeoljeong.autovote.domain.user.UserDao
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -17,4 +18,7 @@ class UserRepositoryAdaptor(
         return userRepository.findByEmail(email)?.toDomain()
     }
 
+    override fun findById(id: Long): User? {
+        return userRepository.findByIdOrNull(id)?.toDomain()
+    }
 }

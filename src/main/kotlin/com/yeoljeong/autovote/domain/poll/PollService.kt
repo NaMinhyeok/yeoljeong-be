@@ -10,11 +10,14 @@ import java.time.temporal.ChronoField
 @Service
 class PollService(
     private val pollAppender: PollAppender,
+    private val pollReader: PollReader,
+    private val voteManager: VoteManager,
+    private val voteReader: VoteReader,
     private val userReader: UserReader
 ) {
 
     fun register(email: String, request: PollRegisterRequest) {
-        val user = userReader.findByEmail(email) ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        val user = userReader.read(email) ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
         val poll = Poll.register(
             title = request.title,
             description = request.description,
@@ -23,6 +26,46 @@ class PollService(
             userId = user.id
         )
         pollAppender.append(poll)
+    }
+
+    fun getPoll(email: String, pollId: Long): PollResult {
+        val user = userReader.read(email) ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        val poll = pollReader.read(pollId) ?: throw IllegalArgumentException("투표를 찾을 수 없습니다.")
+        val writer = userReader.read(poll.userId) ?: throw IllegalArgumentException("작성자를 찾을 수 없습니다.")
+
+        val votedOptionUser = poll.options.associateBy(
+            keySelector = { it.id },
+            valueTransform = { option ->
+                val votes = voteReader.read(option.id)
+                votes.map { vote ->
+                    val candidateUser =
+                        userReader.read(vote.userId) ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
+                    candidateUser.name
+                }
+            }
+        )
+        val isVoted = poll.options.any() {
+            voteManager.exist(user.id, it.id)
+        }
+        val response = PollResult(
+            pollId = poll.id,
+            writer = writer.name,
+            writerImgUrl = writer.imgUrl,
+            title = poll.title,
+            description = poll.description,
+            endAt = poll.endAt.toString(),
+            status = poll.status,
+            voted = isVoted,
+            options = poll.options.map {
+                PollOptionResult(
+                    id = it.id,
+                    content = it.content,
+                    count = votedOptionUser[it.id]?.size ?: 0,
+                    votedUserName = votedOptionUser[it.id] ?: emptyList()
+                )
+            }
+        )
+        return response
     }
 
     @Scheduled(cron = "0 0 9 * * SAT")
