@@ -17,7 +17,7 @@ class PollService(
 ) {
 
     fun register(email: String, request: PollRegisterRequest) {
-        val user = userReader.read(email) ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        val user = userReader.read(email)
         val poll = Poll.register(
             title = request.title,
             description = request.description,
@@ -29,9 +29,9 @@ class PollService(
     }
 
     fun getPoll(email: String, pollId: Long): PollResult {
-        val user = userReader.read(email) ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
-        val poll = pollReader.read(pollId) ?: throw IllegalArgumentException("투표를 찾을 수 없습니다.")
-        val writer = userReader.read(poll.userId) ?: throw IllegalArgumentException("작성자를 찾을 수 없습니다.")
+        val user = userReader.read(email)
+        val poll = pollReader.read(pollId)
+        val writer = userReader.read(poll.userId)
 
         val votedOptionUser = poll.options.associateBy(
             keySelector = { it.id },
@@ -39,7 +39,7 @@ class PollService(
                 val votes = voteReader.read(option.id)
                 votes.map { vote ->
                     val candidateUser =
-                        userReader.read(vote.userId) ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
+                        userReader.read(vote.userId)
                     candidateUser.name
                 }
             }

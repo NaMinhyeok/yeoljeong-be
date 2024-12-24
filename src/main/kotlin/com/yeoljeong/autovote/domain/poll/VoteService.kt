@@ -11,7 +11,7 @@ class VoteService(
 ) {
 
     fun vote(email: String, options: Set<Long>) {
-        userReader.read(email)?.let { user ->
+        userReader.read(email).let { user ->
             voteManager.vote(user.id, options)
         }
     }
@@ -19,8 +19,8 @@ class VoteService(
     fun cancel(email: String, pollId: Long) {
         val user = userReader.read(email)
         val poll = pollReader.read(pollId)
-        poll?.options?.forEach {
-            user?.let { user -> voteManager.cancel(user.id, it.id) }
+        poll.options.forEach {
+            user.let { user -> voteManager.cancel(user.id, it.id) }
         }
     }
 
